@@ -23,7 +23,7 @@ Start:      mov ah, 09h
             mov di, offset Key              ;              |----------------------------------------------------------------|      
             repe cmpsb                      ;              | First vulnerability! JE is written erroneously instead of JNE! |
             je Right                        ;------------->|               Empty password will be right!                    |
-                                            :              |----------------------------------------------------------------|
+                                            ;              |----------------------------------------------------------------|
 Invalid:    mov dx, offset InvalidKey
             int 21h
             jmp Exit
