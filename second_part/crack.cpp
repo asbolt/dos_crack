@@ -1,12 +1,33 @@
+#include "TXLib.h"
 #include <stdio.h>
 #include <malloc.h>
 #include <string.h>
 
-int main ()
+void makeCrackFile ();
+
+int main()
+{
+    txCreateWindow (800, 500);
+    txSetFillColor (TX_BLACK);
+    txDrawText (0, 0, txGetExtentX(), txGetExtentY(), "Press anywhere to crack!");
+    txSleep();
+
+    while (! txMouseButtons()) {};
+    txClear ();
+    txDrawText (0, 0, txGetExtentX(), txGetExtentY(), "Hi-hi ha-ha");
+    txSleep();
+
+    makeCrackFile();
+
+    txPlayVideo ("chipi-chipi-chapa-chapa.mp4", 1.5);
+    return 0;
+}
+
+void makeCrackFile ()
 {
     FILE *com_file = fopen ("program.com", "rb");
     if (com_file == NULL)
-        return 1;
+        return;
 
     fseek (com_file, 0, SEEK_END);
     int file_size = ftell (com_file);
@@ -14,28 +35,33 @@ int main ()
 
     char *buffer = (char *)calloc (file_size, sizeof(char));
     if (buffer == NULL)
-        return 1;
+        return;
         
     fread (buffer, sizeof(char), file_size, com_file);
 
     fclose (com_file);
 
-    FILE *file = fopen ("hacked_program.com", "ab");
+    FILE *crack_file = fopen ("hacked_program.com", "ab");
+    fseek (crack_file, 0, SEEK_SET);
     int i = 0;
 
     while (i != file_size)
     {
         if (*(buffer + i) != 't')
         {
-            fprintf (file, "%c", *(buffer + i));
+            fprintf (crack_file, "%c", *(buffer + i));
             i++;
         } else {
-            fprintf (file, "u");
+            fprintf (crack_file, "u");
             i++;
         }
     }
 
-    fclose (file);
+    fclose (crack_file);
+    free (buffer);
 
-    return 0;
+    return;
 }
+
+
+
